@@ -2,7 +2,7 @@
 @model List<int>
 @{
     ViewData["Title"] = "Event configuration";
-    var allBanners = GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Reverse().ToList();
+    var allBanners = GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.Id).Reverse().ToList();
     var activeIds = Model;
 }
 

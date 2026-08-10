@@ -18,13 +18,15 @@ public class EventLoginReceiveAll : LobbyMessage
         if (!user.LoginEventInfo.TryGetValue(req.EventId, out var loginEventData))
         {
             loginEventData = new LoginEventData();
+            loginEventData.LastDay++;
+            loginEventData.LastDate = DateTime.Now.Ticks;
             user.LoginEventInfo.Add(req.EventId, loginEventData);
         }
         response.Reward = new();
         NetRewardData rewardData = new();
         GameData.Instance.LoginEventTable.Values.Where(ev => ev.EventId == req.EventId).ToList().ForEach(ev =>
         {
-            if (!loginEventData.Days.Contains(ev.Day))
+            if (!loginEventData.Days.Contains(ev.Day) && loginEventData.LastDay >= ev.Day)
             {
                 loginEventData.Days.Add(ev.Day);
                 RewardRecord reward = GameData.Instance.GetRewardTableEntry(ev.RewardId) ?? throw new Exception($"unknown reward Id {ev.RewardId}");

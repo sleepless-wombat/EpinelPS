@@ -21,14 +21,22 @@ public class EventLoginGet : LobbyMessage
         if (!user.LoginEventInfo.TryGetValue(evId, out var loginEventData))
         {
             loginEventData = new LoginEventData();
+            loginEventData.LastDay++;
+            loginEventData.LastDate = DateTime.Now.Ticks;
             user.LoginEventInfo.Add(evId, loginEventData);
             JsonDb.Save();
         }
+
+        // Increment the login count if needed.
+        if (loginEventData.LastDate == 0)
+        {
+            loginEventData.LastDay++;
+            loginEventData.LastDate = DateTime.Now.Ticks;
+        }
+
         // Populate response with event data
-        int day = 1;
         GameData.Instance.LoginEventTable.Values.Where(ev => ev.EventId == evId).ToList().ForEach(ev =>
         {
-            loginEventData.LastDay = day++;
             response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = loginEventData.Days.Contains(ev.Day), Day = ev.Day });
         });
 

@@ -625,6 +625,13 @@ public class User
             ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
             ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;           
 
+            // Reset daily login event last dates
+            foreach (var item in LoginEventInfo)
+            {
+                item.Value.LastDate = 0;
+            }
+
+
             needsSave = true;
         }
 
